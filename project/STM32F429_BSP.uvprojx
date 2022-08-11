@@ -137,7 +137,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2V8M.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -186,7 +186,7 @@
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -395,11 +395,6 @@
           <GroupName>Hal</GroupName>
           <Files>
             <File>
-              <FileName>gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Hal\gpio.c</FilePath>
-            </File>
-            <File>
               <FileName>i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Hal\i2c.c</FilePath>
@@ -410,14 +405,24 @@
               <FilePath>..\Hal\sdio.c</FilePath>
             </File>
             <File>
-              <FileName>spi.c</FileName>
+              <FileName>hal_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Hal\spi.c</FilePath>
+              <FilePath>..\Hal\hal_uart.c</FilePath>
             </File>
             <File>
-              <FileName>usart.c</FileName>
+              <FileName>hal_led.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Hal\usart.c</FilePath>
+              <FilePath>..\Hal\hal_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hal\hal_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>w25qxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hal\w25qxx.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -848,6 +853,11 @@
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\stm32f4xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f429_hal_system.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\stm32f429_hal_system.c</FilePath>
             </File>
           </Files>
         </Group>
