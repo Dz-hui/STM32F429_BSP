@@ -4,6 +4,10 @@
         "hal_led.h": "c",
         "hal_uart.h": "c",
         "w25qxx.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "hal_spi.h": "c",
+        "hal_i2c.h": "c",
+        "eeprom.h": "c",
+        "at24cxx.h": "c"
     }
 }

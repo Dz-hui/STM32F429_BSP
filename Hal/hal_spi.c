@@ -47,18 +47,18 @@ void hal_spi_init(void){
 
     HAL_SPI_Init(&flash_spi);
     __HAL_SPI_ENABLE(&flash_spi);
-    w25qxx_mode_init();
+
 }
 
 uint8_t hal_spi_write_data(uint8_t pData){
 
-    uint16_t SPITimeout = 1000;
+    uint16_t SPITimeout = 10000;
 
     while (__HAL_SPI_GET_FLAG( &flash_spi, SPI_FLAG_TXE ) == RESET){
         if((SPITimeout--) == 0) return 0;
     }
     WRITE_REG(flash_spi.Instance->DR, pData);
-    SPITimeout = 1000;
+    SPITimeout = 10000;
     while (__HAL_SPI_GET_FLAG( &flash_spi, SPI_FLAG_RXNE ) == RESET){
         if((SPITimeout--) == 0) return 0;
     }
@@ -67,9 +67,9 @@ uint8_t hal_spi_write_data(uint8_t pData){
 
 }
 
-uint8_t hal_spi_read_data(uint8_t pData){
+uint8_t hal_spi_read_data(void){
 
-    return hal_spi_write_data(pData);
+    return hal_spi_write_data(Dummy_Byte);
 
 }
 

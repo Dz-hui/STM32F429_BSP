@@ -14,13 +14,12 @@ extern "C" {
 #include "hal_led.h"
 #include "hal_uart.h"
 #include "hal_spi.h"
+#include "hal_i2c.h"
 #include "w25qxx.h"
+#include "at24cxx.h"
+
 void Error_Handler(void);
 
-
-
-#define I2C_SCL_Pin GPIO_PIN_6
-#define I2C_SCL_GPIO_Port GPIOB
 
 #ifdef __cplusplus
 }

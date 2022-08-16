@@ -5,6 +5,7 @@ uint32_t w25qxx_raed_ID(void){
     uint32_t temp = 0;
     uint8_t temp0 = 0,temp1 = 0,temp2 = 0;
 
+    w25qxx_mode_init();
     
     SPI_CS_LOW();
     hal_spi_write_data(W25X_JedecDeviceID);
@@ -49,6 +50,7 @@ void w25qxx_chip_erase(void){
     SPI_CS_LOW();
     hal_spi_write_data(W25X_ChipErase);
     SPI_CS_HIGH();
+    w25qxx_waitforwriteend();
 
 }
 
@@ -56,6 +58,7 @@ void w25qxx_sector_erase(uint32_t addr){
 
     w25qxx_write_enable();
     w25qxx_waitforwriteend();
+
     SPI_CS_LOW();
     hal_spi_write_data(W25X_SectorErase);
     hal_spi_write_data((addr & 0XFF000000)>>24);
@@ -63,21 +66,24 @@ void w25qxx_sector_erase(uint32_t addr){
     hal_spi_write_data((addr & 0XFF00)>>8);
     hal_spi_write_data((addr & 0XFF));
     SPI_CS_HIGH();
-    
+
+    w25qxx_waitforwriteend();
 }
 
 uint8_t w25qxx_waitforwriteend(void){
     
     uint8_t flag = 0;
-    uint16_t timeout = 500;
+    uint16_t timeout = 10000;
 
     SPI_CS_LOW();
-    hal_spi_write_data(W25X_WriteStatusReg);
+    hal_spi_write_data(W25X_ReadStatusReg);
     do{
         flag = hal_spi_write_data(Dummy_Byte);
-        if((timeout --) == 0){
-            return 0;
-        }
+        {
+            if((timeout --) == 0){
+                return 0;
+            }
+        }    
     }
     while((flag & WIP_Flag) == SET);
     SPI_CS_HIGH();
@@ -86,7 +92,7 @@ uint8_t w25qxx_waitforwriteend(void){
 void w25qxx_pagewrite(uint8_t *pbuff,uint32_t addr,uint8_t numofpage){
 
     w25qxx_write_enable();
-
+    w25qxx_waitforwriteend();
     SPI_CS_LOW();
     hal_spi_write_data(W25X_PageProgram);
     hal_spi_write_data((addr & 0XFF000000)>>24);
@@ -95,6 +101,7 @@ void w25qxx_pagewrite(uint8_t *pbuff,uint32_t addr,uint8_t numofpage){
     hal_spi_write_data((addr & 0XFF));
 
     if(numofpage > W25QXX_WritePageSize){
+        numofpage = W25QXX_WritePageSize;
         printf("w25qxx_pagewrite error\n");
     }
 
@@ -164,12 +171,9 @@ void w25qxx_buffwrite(uint8_t *pbuff,uint32_t addr,uint32_t size){
         }
         
     }
-}
+} 
     
 void w25qxx_buffread(uint8_t *pbuff,uint32_t addr,uint32_t size){
-
-    w25qxx_write_enable();
-    w25qxx_waitforwriteend();
 
     SPI_CS_LOW();
     hal_spi_write_data(W25X_ReadData);

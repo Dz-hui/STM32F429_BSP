@@ -29,7 +29,7 @@ extern SPI_HandleTypeDef flash_spi;
 
 void hal_spi_init(void);
 uint8_t hal_spi_write_data(uint8_t pData);
-uint8_t hal_spi_read_data(uint8_t pData);
+uint8_t hal_spi_read_data(void);
 
 
 
