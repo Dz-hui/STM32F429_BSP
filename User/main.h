@@ -15,6 +15,7 @@ extern "C" {
 #include "hal_uart.h"
 #include "hal_spi.h"
 #include "hal_i2c.h"
+#include "hal_sdio.h"
 #include "w25qxx.h"
 #include "at24cxx.h"
 

@@ -8,6 +8,8 @@
         "hal_spi.h": "c",
         "hal_i2c.h": "c",
         "eeprom.h": "c",
-        "at24cxx.h": "c"
+        "at24cxx.h": "c",
+        "hal_sdio.h": "c",
+        "stm32469i_discovery.h": "c"
     }
 }
