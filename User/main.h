@@ -4,13 +4,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #include "stdio.h"
 #include "string.h"
+
 
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
 #include "stm32f429_hal_system.h"
+
 #include "hal_led.h"
 #include "hal_uart.h"
 #include "hal_spi.h"
@@ -18,6 +19,10 @@ extern "C" {
 #include "hal_sdio.h"
 #include "w25qxx.h"
 #include "at24cxx.h"
+
+#include "ff.h"
+#include "diskio.h"
+#include "ffconf.h"
 
 void Error_Handler(void);
 

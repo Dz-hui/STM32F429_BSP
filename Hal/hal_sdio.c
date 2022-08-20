@@ -5,9 +5,10 @@ SD_HandleTypeDef uSdHandle;
 uint8_t hal_sdio_init(void){
 
     uint8_t sd_state = MSD_OK;
-  
+    hal_sd_gpio_init();
+    SDIO_CLOCK_ENABLE();
+
     uSdHandle.Instance = SDIO;
-  
     uSdHandle.Init.ClockEdge           = SDIO_CLOCK_EDGE_RISING;
     uSdHandle.Init.ClockBypass         = SDIO_CLOCK_BYPASS_DISABLE;
     uSdHandle.Init.ClockPowerSave      = SDIO_CLOCK_POWER_SAVE_DISABLE;
@@ -15,6 +16,10 @@ uint8_t hal_sdio_init(void){
     uSdHandle.Init.HardwareFlowControl = SDIO_HARDWARE_FLOW_CONTROL_ENABLE;
     uSdHandle.Init.ClockDiv            = SDIO_TRANSFER_CLK_DIV;
   
+    if(HAL_SD_Init(&uSdHandle) != HAL_OK){
+      sd_state = MSD_ERROR;
+    }
+
 #ifdef STM32  
     BSP_SD_Detect_MspInit(&uSdHandle, NULL); 
     if(hal_sd_isdetected() != SD_PRESENT)   /* Check if SD card is present */
@@ -22,11 +27,6 @@ uint8_t hal_sdio_init(void){
       return MSD_ERROR_SD_NOT_PRESENT;
     }
 #endif     
-
-    hal_sd_gpio_init(&uSdHandle, NULL);
-    if(HAL_SD_Init(&uSdHandle) != HAL_OK){
-      sd_state = MSD_ERROR;
-    }
 
     if(sd_state == MSD_OK){
       if(HAL_SD_ConfigWideBusOperation(&uSdHandle, SDIO_BUS_WIDE_4B) != HAL_OK){
@@ -39,9 +39,9 @@ uint8_t hal_sdio_init(void){
     return  sd_state;
 }
 
-uint8_t hal_sd_readbocks(uint32_t *pData, uint32_t ReadAddr, uint32_t NumOfBlocks, uint32_t Timeout){
+uint8_t hal_sd_read_blocks(uint32_t *pData, uint32_t ReadAddr, uint32_t NumOfBlocks){
 
-    if(HAL_SD_ReadBlocks(&uSdHandle, (uint8_t *)pData, ReadAddr, NumOfBlocks, Timeout) != HAL_OK){
+    if(HAL_SD_ReadBlocks(&uSdHandle, (uint8_t *)pData, ReadAddr, NumOfBlocks, 1000) != HAL_OK){
       return MSD_ERROR;
     }
     else{
@@ -49,9 +49,9 @@ uint8_t hal_sd_readbocks(uint32_t *pData, uint32_t ReadAddr, uint32_t NumOfBlock
     }
 }
 
-uint8_t hal_sd_writeblocks(uint32_t *pData, uint32_t WriteAddr, uint32_t NumOfBlocks, uint32_t Timeout){
+uint8_t hal_sd_write_blocks(uint32_t *pData, uint32_t WriteAddr, uint32_t NumOfBlocks){
 
-    if(HAL_SD_WriteBlocks(&uSdHandle, (uint8_t *)pData, WriteAddr, NumOfBlocks, Timeout) != HAL_OK){
+    if(HAL_SD_WriteBlocks(&uSdHandle, (uint8_t *)pData, WriteAddr, NumOfBlocks, 1000) != HAL_OK){
       return MSD_ERROR;
     }
     else{
@@ -59,7 +59,7 @@ uint8_t hal_sd_writeblocks(uint32_t *pData, uint32_t WriteAddr, uint32_t NumOfBl
     }
 }
 
-uint8_t hal_sd_readblocks_dma(uint32_t *pData, uint32_t ReadAddr, uint32_t NumOfBlocks){  
+uint8_t hal_sd_read_blocks_dma(uint32_t *pData, uint32_t ReadAddr, uint32_t NumOfBlocks){  
   
     if(HAL_SD_ReadBlocks_DMA(&uSdHandle, (uint8_t *)pData, ReadAddr, NumOfBlocks) != HAL_OK){
       return MSD_ERROR;
@@ -69,7 +69,7 @@ uint8_t hal_sd_readblocks_dma(uint32_t *pData, uint32_t ReadAddr, uint32_t NumOf
     }
 }
 
-uint8_t hal_sd_writeblocks_dma(uint32_t *pData, uint32_t WriteAddr, uint32_t NumOfBlocks){ 
+uint8_t hal_sd_write_blocks_dma(uint32_t *pData, uint32_t WriteAddr, uint32_t NumOfBlocks){ 
 
     if(HAL_SD_WriteBlocks_DMA(&uSdHandle, (uint8_t *)pData, WriteAddr, NumOfBlocks) != HAL_OK){
       return MSD_ERROR;
@@ -80,7 +80,7 @@ uint8_t hal_sd_writeblocks_dma(uint32_t *pData, uint32_t WriteAddr, uint32_t Num
 }
 
 
-uint8_t hal_sd_erase(uint32_t StartAddr, uint32_t EndAddr)
+uint8_t hal_sd_sectorerase(uint32_t StartAddr, uint32_t EndAddr)
 {
   if(HAL_SD_Erase(&uSdHandle, StartAddr, EndAddr) != HAL_OK)
   {
@@ -92,18 +92,36 @@ uint8_t hal_sd_erase(uint32_t StartAddr, uint32_t EndAddr)
   }
 }
 
+#ifdef YH_STM32F4XX
+static void WIFI_PDN_INIT(void){
+
+	  GPIO_InitTypeDef GPIO_InitStruct;
+	  __HAL_RCC_GPIOG_CLK_ENABLE();
+
+	  GPIO_InitStruct.Pin = GPIO_PIN_9;	
+	  GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;      
+	  GPIO_InitStruct.Pull  = GPIO_PULLUP;
+	  GPIO_InitStruct.Speed = GPIO_SPEED_FAST; 
+	  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);	
+
+	  HAL_GPIO_WritePin(GPIOG,GPIO_PIN_9,GPIO_PIN_RESET);  
+}
+#endif 
 
 void hal_sd_gpio_init(void){
 
     GPIO_InitTypeDef SDIO_GPIO_InitStruct;
 
-    SDIO_CLOCK_ENABLE();
     SDIO_D0_CLOCK_ENABLE();
     SDIO_D1_CLOCK_ENABLE();
     SDIO_D2_CLOCK_ENABLE();
     SDIO_D3_CLOCK_ENABLE();
     SDIO_CLK_CLOCK_ENABLE();
     SDIO_CMD_CLOCK_ENABLE();
+
+#ifdef YH_STM32F4XX
+    WIFI_PDN_INIT();
+#endif 
     
     SDIO_GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     SDIO_GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -254,14 +272,14 @@ __weak void BSP_SD_MspDeInit(SD_HandleTypeDef *hsd, void *Params){
 }
 #endif
 
-uint8_t hal_sd_getcardstate(void){
+uint8_t hal_sd_get_cardstate(void){
 
   return((HAL_SD_GetCardState(&uSdHandle) == HAL_SD_CARD_TRANSFER ) ? SD_TRANSFER_OK : SD_TRANSFER_BUSY);
 }
   
 
 
-void hal_sd_getcardinfo(HAL_SD_CardInfoTypeDef *CardInfo){
+void hal_sd_get_cardinfo(HAL_SD_CardInfoTypeDef *CardInfo){
   
   HAL_SD_GetCardInfo(&uSdHandle, CardInfo);
 }

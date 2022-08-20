@@ -1,6 +1,6 @@
 #include "w25qxx.h"
 
-uint32_t w25qxx_raed_ID(void){
+uint32_t w25qxx_readID(void){
 
     uint32_t temp = 0;
     uint8_t temp0 = 0,temp1 = 0,temp2 = 0;
@@ -44,7 +44,7 @@ void w25qxx_write_enable(void){
 
 }
 
-void w25qxx_chip_erase(void){
+void w25qxx_chiperase(void){
 
     w25qxx_write_enable();
     SPI_CS_LOW();
@@ -54,7 +54,7 @@ void w25qxx_chip_erase(void){
 
 }
 
-void w25qxx_sector_erase(uint32_t addr){
+void w25qxx_sectorerase(uint32_t addr){
 
     w25qxx_write_enable();
     w25qxx_waitforwriteend();
@@ -115,7 +115,7 @@ void w25qxx_pagewrite(uint8_t *pbuff,uint32_t addr,uint8_t numofpage){
 
 }
 
-void w25qxx_buffwrite(uint8_t *pbuff,uint32_t addr,uint32_t size){
+void w25qxx_writebuff(uint8_t *pbuff,uint32_t addr,uint32_t size){
 
     uint16_t sectoroffset = 0;
     uint8_t numofpage = 0;
@@ -173,7 +173,7 @@ void w25qxx_buffwrite(uint8_t *pbuff,uint32_t addr,uint32_t size){
     }
 } 
     
-void w25qxx_buffread(uint8_t *pbuff,uint32_t addr,uint32_t size){
+void w25qxx_readbuff(uint8_t *pbuff,uint32_t addr,uint32_t size){
 
     SPI_CS_LOW();
     hal_spi_write_data(W25X_ReadData);

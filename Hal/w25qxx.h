@@ -48,15 +48,15 @@ extern "C" {
 #define WIP_Flag                  0x01  /* Write In Progress (WIP) flag */
 #define Dummy_Byte                0xFF
 
-uint32_t w25qxx_raed_ID(void);
+uint32_t w25qxx_readID(void);
 void w25qxx_mode_init(void);
 void w25qxx_write_enable(void);
-void w25qxx_chip_erase(void);
-void w25qxx_sector_erase(uint32_t addr);
+void w25qxx_chiperase(void);
+void w25qxx_sectorerase(uint32_t addr);
 uint8_t w25qxx_waitforwriteend(void);
 void w25qxx_pagewrite(uint8_t *pbuff,uint32_t addr,uint8_t numofpage);
-void w25qxx_buffwrite(uint8_t *pbuff,uint32_t addr,uint32_t size);
-void w25qxx_buffread(uint8_t *pbuff,uint32_t addr,uint32_t size);
+void w25qxx_writebuff(uint8_t *pbuff,uint32_t addr,uint32_t size);
+void w25qxx_readbuff(uint8_t *pbuff,uint32_t addr,uint32_t size);
 
 #ifdef __cplusplus
 }

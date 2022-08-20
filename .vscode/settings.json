@@ -10,6 +10,9 @@
         "eeprom.h": "c",
         "at24cxx.h": "c",
         "hal_sdio.h": "c",
-        "stm32469i_discovery.h": "c"
+        "stm32469i_discovery.h": "c",
+        "diskio.h": "c",
+        "ios": "c",
+        "ff.c": "cpp"
     }
 }
