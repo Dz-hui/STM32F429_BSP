@@ -71,7 +71,7 @@ DSTATUS disk_initialize (
 		return stat;
 
 	case DEV_MMC :
-		result = hal_sdio_init();
+//		result = hal_sdio_init();
 		if(result == MSD_OK){
 			stat = RES_OK;
 		}

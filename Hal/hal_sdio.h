@@ -58,27 +58,15 @@
 #define BSP_SD_DMA_Rx_IRQHandler                DMA2_Stream3_IRQHandler
 #define SD_DetectIRQHandler()                   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8)
 
-uint8_t hal_sdio_init(void);
-void hal_sd_gpio_init(void);
-uint8_t hal_sd_ITonfig(void);
-uint8_t hal_sd_read_blocks(uint32_t *pData, uint32_t ReadAddr, uint32_t NumOfBlocks);
-uint8_t hal_sd_write_blocks(uint32_t *pData, uint32_t WriteAddr, uint32_t NumOfBlocks);
-uint8_t hal_sd_read_blocks_dma(uint32_t *pData, uint32_t ReadAddr, uint32_t NumOfBlocks);
-uint8_t hal_sd_write_blocks_dma(uint32_t *pData, uint32_t WriteAddr, uint32_t NumOfBlocks);
-uint8_t hal_sd_sectorerase(uint32_t StartAddr, uint32_t EndAddr);
-uint8_t hal_sd_get_cardstate(void);
-void    hal_sd_get_cardinfo(HAL_SD_CardInfoTypeDef *CardInfo);
-uint8_t hal_sd_isdetected(void);
 static void WIFI_PDN_INIT(void);
-
-/* These functions can be modified in case the current settings (e.g. DMA stream)
-   need to be changed for specific application needs */
-void    BSP_SD_MspInit(SD_HandleTypeDef *hsd, void *Params);
-void    BSP_SD_Detect_MspInit(SD_HandleTypeDef *hsd, void *Params);
-void    BSP_SD_MspDeInit(SD_HandleTypeDef *hsd, void *Params);
-void    BSP_SD_AbortCallback(void);
-void    BSP_SD_WriteCpltCallback(void);
-void    BSP_SD_ReadCpltCallback(void);
+static void hal_sd_gpio_init(void);
+void hal_sdio_init(void);
+void hal_sd_read_block(uint32_t *pData, uint32_t ReadAddr,uint32_t NumberOfBlocks);
+void hal_sd_write_block(uint32_t *pData, uint32_t WriteAddr,uint32_t NumberOfBlocks);
+uint8_t hal_sd_get_cardstate(void);
+uint8_t hal_sd_erase(uint32_t StartAddr, uint32_t EndAddr);
+void hal_sd_get_cardinfo(HAL_SD_CardInfoTypeDef *CardInfo);
+void hal_sd_get_cardcsd(HAL_SD_CardCSDTypeDef *pCSD);
 
 #ifdef __cplusplus
 }

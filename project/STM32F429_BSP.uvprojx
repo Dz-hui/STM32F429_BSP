@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F429xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\project;..\Hal;..\User;..\Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\project;..\Hal;..\User;..\Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates;..\Lib</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -395,16 +395,6 @@
           <GroupName>Hal</GroupName>
           <Files>
             <File>
-              <FileName>i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Hal\i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>sdio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Hal\sdio.c</FilePath>
-            </File>
-            <File>
               <FileName>hal_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Hal\hal_uart.c</FilePath>
@@ -423,6 +413,21 @@
               <FileName>w25qxx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Hal\w25qxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>at24cxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hal\at24cxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hal\hal_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_sdio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hal\hal_sdio.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -858,6 +863,31 @@
               <FileName>stm32f429_hal_system.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\stm32f429_hal_system.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Fatfs</GroupName>
+          <Files>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\diskio.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\ff.c</FilePath>
+            </File>
+            <File>
+              <FileName>ffsystem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\ffsystem.c</FilePath>
+            </File>
+            <File>
+              <FileName>ffunicode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\ffunicode.c</FilePath>
             </File>
           </Files>
         </Group>
