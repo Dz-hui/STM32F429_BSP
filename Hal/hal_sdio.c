@@ -66,8 +66,8 @@ void hal_sdio_init(void){
     uSdHandle.Init.ClockBypass = SDIO_CLOCK_BYPASS_DISABLE;
     uSdHandle.Init.ClockPowerSave = SDIO_CLOCK_POWER_SAVE_DISABLE;
     uSdHandle.Init.BusWide = SDIO_BUS_WIDE_1B;
-    uSdHandle.Init.HardwareFlowControl = SDIO_HARDWARE_FLOW_CONTROL_DISABLE;
-    uSdHandle.Init.ClockDiv = SDIO_TRANSFER_CLK_DIV;
+    uSdHandle.Init.HardwareFlowControl = SDIO_HARDWARE_FLOW_CONTROL_ENABLE;
+    uSdHandle.Init.ClockDiv = 4;
   
     if(HAL_SD_Init(&uSdHandle) != HAL_OK){
         Error_Handler();

@@ -15,8 +15,6 @@ int main(void){
     LED_GPIO_Init();
     hal_debug_uart_init();
     hal_i2c_init();
-
-    //SD_Test();
     hal_sdio_init();
 
 	hal_sd_erase(0,1);
