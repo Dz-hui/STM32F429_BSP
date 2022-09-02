@@ -15,7 +15,6 @@
 #define DEV_MMC		1	/* Example: Map MMC/SD card to physical drive 1 */
 //#define DEV_USB		2	/* Example: Map USB MSD to physical drive 2 */
 
-
 /*-----------------------------------------------------------------------*/
 /* Get Drive Status                                                      */
 /*-----------------------------------------------------------------------*/
@@ -38,6 +37,7 @@ DSTATUS disk_status (
 
 	case DEV_MMC :
 		stat = RES_OK;
+
 		return stat;
 
 	// case DEV_USB :
@@ -71,11 +71,9 @@ DSTATUS disk_initialize (
 		return stat;
 
 	case DEV_MMC :
-//		result = hal_sdio_init();
-		if(result == MSD_OK){
-			stat = RES_OK;
-		}
-
+		hal_sdio_init();
+		stat = RES_OK;
+		
 		return stat;
 
 	// case DEV_USB :
@@ -112,7 +110,11 @@ DRESULT disk_read (
 		return res;
 
 	case DEV_MMC :
-//		result = hal_sd_read_blocks((uint8_t *)buff, sector, count);
+		hal_sd_read_block((uint8_t *)buff, (uint32_t) (sector), count);
+    	while(hal_sd_get_cardstate() != MSD_OK)
+    	{
+    	}
+		res = RES_OK;
 
 		return res;
 
@@ -146,7 +148,7 @@ DRESULT disk_write (
 {
 	DRESULT res;
 	int result;
-
+	
 	switch (pdrv) {
 	case DEV_RAM :
 		w25qxx_sectorerase(sector*4096);
@@ -156,9 +158,16 @@ DRESULT disk_write (
 		return res;
 
 	case DEV_MMC :
-//		result = hal_sd_write_blocks((uint8_t *)buff, sector, count);
+		hal_sd_write_block((uint8_t *)buff, (uint32_t) (sector), count);
+		while(hal_sd_get_cardstate() != MSD_OK)
+    	{
+    	}
+    	res = RES_OK;
 
 		return res;
+		}
+
+		
 
 	// case DEV_USB :
 	// 	// translate the arguments here
@@ -168,7 +177,7 @@ DRESULT disk_write (
 	// 	// translate the reslut code here
 
 	// 	return res;
-	}
+	
 
 	return RES_PARERR;
 }
@@ -223,18 +232,19 @@ DRESULT disk_ioctl (
 			case CTRL_SYNC: res = RES_OK; break;
 
 			case GET_SECTOR_SIZE:
-				*(DWORD*)buff = 512; 
+				hal_sd_get_cardinfo(&CardInfo);
+				*(DWORD*)buff = CardInfo.LogBlockSize; 
 				res = RES_OK;
 			break;
 			
 			case GET_BLOCK_SIZE:
-				*(WORD*)buff = 8;
+				//hal_sd_get_cardinfo(&CardInfo);
+				*(WORD*)buff = CardInfo.LogBlockSize/512;
 				res = RES_OK;
 				break;
 
 			case GET_SECTOR_COUNT:
-				hal_sd_get_cardinfo(&CardInfo);
-				*(DWORD*)buff = CardInfo.BlockNbr;
+				*(DWORD*)buff = CardInfo.LogBlockNbr;
 				res = RES_OK;
 				break;
 

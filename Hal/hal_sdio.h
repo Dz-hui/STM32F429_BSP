@@ -61,8 +61,8 @@
 static void WIFI_PDN_INIT(void);
 static void hal_sd_gpio_init(void);
 void hal_sdio_init(void);
-void hal_sd_read_block(uint32_t *pData, uint32_t ReadAddr,uint32_t NumberOfBlocks);
-void hal_sd_write_block(uint32_t *pData, uint32_t WriteAddr,uint32_t NumberOfBlocks);
+void hal_sd_read_block(uint8_t *pData, uint32_t ReadAddr,uint32_t NumberOfBlocks);
+void hal_sd_write_block(uint8_t *pData, uint32_t WriteAddr,uint32_t NumberOfBlocks);
 uint8_t hal_sd_get_cardstate(void);
 uint8_t hal_sd_erase(uint32_t StartAddr, uint32_t EndAddr);
 void hal_sd_get_cardinfo(HAL_SD_CardInfoTypeDef *CardInfo);

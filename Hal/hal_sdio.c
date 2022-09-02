@@ -79,7 +79,7 @@ void hal_sdio_init(void){
       
 }
 
-void hal_sd_read_block(uint32_t *pData, uint32_t ReadAddr,uint32_t NumberOfBlocks) {
+void hal_sd_read_block(uint8_t *pData, uint32_t ReadAddr,uint32_t NumberOfBlocks) {
     
     if(HAL_SD_ReadBlocks(&uSdHandle,(uint8_t *)pData,ReadAddr,NumberOfBlocks,1000) != HAL_OK)
     {
@@ -88,7 +88,7 @@ void hal_sd_read_block(uint32_t *pData, uint32_t ReadAddr,uint32_t NumberOfBlock
     
 }
 
-void hal_sd_write_block(uint32_t *pData, uint32_t WriteAddr,uint32_t NumberOfBlocks) {
+void hal_sd_write_block(uint8_t *pData, uint32_t WriteAddr,uint32_t NumberOfBlocks) {
     
     if(HAL_SD_WriteBlocks(&uSdHandle,(uint8_t *)pData,WriteAddr,NumberOfBlocks,1000) != HAL_OK)
     {
