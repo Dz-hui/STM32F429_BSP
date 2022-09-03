@@ -13,6 +13,7 @@
         "stm32469i_discovery.h": "c",
         "diskio.h": "c",
         "ios": "c",
-        "ff.c": "cpp"
+        "ff.c": "cpp",
+        "hal_internalflash.h": "c"
     }
 }

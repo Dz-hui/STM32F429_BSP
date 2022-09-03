@@ -15,7 +15,7 @@ int main(void){
     LED_GPIO_Init();
     hal_debug_uart_init();
     hal_i2c_init();
-    
+
     res_sd = f_mount(&fs,"1:",1);
     
     if(res_sd == FR_NO_FILESYSTEM){
