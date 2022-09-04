@@ -429,6 +429,11 @@
               <FileType>1</FileType>
               <FilePath>..\Hal\hal_sdio.c</FilePath>
             </File>
+            <File>
+              <FileName>hal_internalflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hal\hal_internalflash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

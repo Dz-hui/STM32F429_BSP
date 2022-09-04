@@ -25,6 +25,10 @@ extern "C" {
 #include "diskio.h"
 #include "ffconf.h"
 
+#include "test.h"
+
+#define DEBUG
+
 void Error_Handler(void);
 
 

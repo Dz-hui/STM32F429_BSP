@@ -16,9 +16,17 @@ extern "C" {
 #define ADDR_FLASH_SECTOR_5     ((uint32_t)0x08020000) /* Base address of Sector 5, 128 Kbytes  */
 #define ADDR_FLASH_SECTOR_6     ((uint32_t)0x08040000) /* Base address of Sector 6, 128 Kbytes  */
 #define ADDR_FLASH_SECTOR_7     ((uint32_t)0x08060000) /* Base address of Sector 7, 128 Kbytes  */
+#define ADDR_FLASH_SECTOR_8     ((uint32_t)0x08080000) /* Base address of Sector 7, 128 Kbytes  */	
+#define ADDR_FLASH_SECTOR_9    ((uint32_t)0x080A0000)  /* Base address of Sector 7, 128 Kbytes  */
+#define ADDR_FLASH_SECTOR_10    ((uint32_t)0x080C0000) /* Base address of Sector 7, 128 Kbytes  */
+#define ADDR_FLASH_SECTOR_11    ((uint32_t)0x080E0000) /* Base address of Sector 7, 128 Kbytes  */
 
-int InternalFlash_Test(void);
+#define INTERNALFLASH_TIMEOUT   5000U
+#define DATA_32                 ((uint32_t)0x87654321)
 
+void hal_internal_flash_erase(uint32_t firstsector,uint32_t endsector);
+void hal_internalflash_write(uint32_t addr ,uint16_t *buff, uint32_t num);
+uint32_t hal_get_internalflash_sector(uint32_t addr);
 
 #ifdef __cplusplus
 }

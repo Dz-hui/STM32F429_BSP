@@ -1,120 +1,73 @@
 #include "hal_internalflash.h"
 
-#define DATA_32                 ((uint32_t)0x87654321)
-#define FLASH_USER_START_ADDR   ADDR_FLASH_SECTOR_5   
-#define FLASH_USER_END_ADDR     ADDR_FLASH_SECTOR_7  
 
+void hal_internal_flash_erase(uint32_t firstsector,uint32_t endsector){
 
-static uint32_t GetSector(uint32_t Address);
-
-int InternalFlash_Test(void)
-{
-	
-	uint32_t FirstSector = 0;
-	uint32_t NbOfSectors = 0;
-	uint32_t SECTORError = 0;
-	uint32_t Address = 0;
-	__IO uint32_t Data32 = 0;
-	__IO uint32_t MemoryProgramStatus = 0;
-	static FLASH_EraseInitTypeDef EraseInitStruct;
+	HAL_StatusTypeDef flashstatus = HAL_OK;
+	uint32_t SectorError =0;
+	FLASH_EraseInitTypeDef FLASH_EraseInitStruct;
 
 	HAL_FLASH_Unlock();
 
-	FirstSector = GetSector(FLASH_USER_START_ADDR);
-	NbOfSectors = GetSector(FLASH_USER_END_ADDR)- FirstSector + 1;
-
-	EraseInitStruct.TypeErase     = FLASH_TYPEERASE_SECTORS;
-	EraseInitStruct.VoltageRange  = FLASH_VOLTAGE_RANGE_3;
-	EraseInitStruct.Sector        = FirstSector;
-	EraseInitStruct.NbSectors     = NbOfSectors;
-
-	if (HAL_FLASHEx_Erase(&EraseInitStruct, &SECTORError) != HAL_OK)
-	{
-		
-		return -1;
+	FLASH_EraseInitStruct.TypeErase = FLASH_TYPEERASE_SECTORS;
+	FLASH_EraseInitStruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
+	FLASH_EraseInitStruct.Sector = hal_get_internalflash_sector(firstsector);
+	FLASH_EraseInitStruct.NbSectors = hal_get_internalflash_sector(endsector)-hal_get_internalflash_sector(firstsector)+1;
+	flashstatus = HAL_FLASHEx_Erase(&FLASH_EraseInitStruct,&SectorError);
+	if(flashstatus != HAL_OK){
+		#ifdef DEBUG
+		printf("flash erase error\n");
+		#endif
 	}
 
-	Address = FLASH_USER_START_ADDR;
-
-	while (Address < FLASH_USER_END_ADDR)
-	{
-		if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, Address, DATA_32) == HAL_OK)
-		{
-		  Address = Address + 4;
-		}
-		else
-		{ 
-		  
-				return -1;
-		}
+	flashstatus = FLASH_WaitForLastOperation(INTERNALFLASH_TIMEOUT);
+	if(flashstatus != HAL_OK){
+		#ifdef DEBUG
+		printf("flash waitforerase error\n");
+		#endif
 	}
 
+	HAL_FLASH_Lock();
 
-
-	HAL_FLASH_Lock(); 
-
-
-	Address = FLASH_USER_START_ADDR;
-	MemoryProgramStatus = 0;
-
-	while (Address < FLASH_USER_END_ADDR)
-	{
-		Data32 = *(__IO uint32_t*)Address;
-
-		if (Data32 != DATA_32)
-		{
-		  MemoryProgramStatus++;  
-		}
-
-		Address = Address + 4;
-	}  
-	
-	if(MemoryProgramStatus)
-	{    
-		return -1;
-	}
-	else
-	{ 
-		return 0;   
-	}
 }
 
+void hal_internalflash_write(uint32_t addr ,uint16_t *buff, uint32_t num){
 
-static uint32_t GetSector(uint32_t Address)
-{
-  uint32_t sector = 0;
-  
-  if((Address < ADDR_FLASH_SECTOR_1) && (Address >= ADDR_FLASH_SECTOR_0))
-  {
-    sector = FLASH_SECTOR_0;  
-  }
-  else if((Address < ADDR_FLASH_SECTOR_2) && (Address >= ADDR_FLASH_SECTOR_1))
-  {
-    sector = FLASH_SECTOR_1;  
-  }
-  else if((Address < ADDR_FLASH_SECTOR_3) && (Address >= ADDR_FLASH_SECTOR_2))
-  {
-    sector = FLASH_SECTOR_2;  
-  }
-  else if((Address < ADDR_FLASH_SECTOR_4) && (Address >= ADDR_FLASH_SECTOR_3))
-  {
-    sector = FLASH_SECTOR_3;  
-  }
-  else if((Address < ADDR_FLASH_SECTOR_5) && (Address >= ADDR_FLASH_SECTOR_4))
-  {
-    sector = FLASH_SECTOR_4;  
-  }
-  else if((Address < ADDR_FLASH_SECTOR_6) && (Address >= ADDR_FLASH_SECTOR_5))
-  {
-    sector = FLASH_SECTOR_5;  
-  }
-  else if((Address < ADDR_FLASH_SECTOR_7) && (Address >= ADDR_FLASH_SECTOR_6))
-  {
-    sector = FLASH_SECTOR_6;  
-  }
-  else
-  {
-    sector = FLASH_SECTOR_7;  
-  }
-  return sector;
+	HAL_StatusTypeDef flashstatus = HAL_OK;
+	uint32_t firstaddr = addr;			  //写入起始地址
+	uint32_t endaddr = firstaddr+(num*2); //写入结束地址：半字写入（16位），num*2
+
+	if(addr < ADDR_FLASH_SECTOR_0 || addr % 4 ) return ; //地址必须大于flash的基地址且是4的整数倍 
+
+	HAL_FLASH_Unlock();
+	while(addr<endaddr){
+		flashstatus = HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD,addr,*buff);
+		if(flashstatus != HAL_OK){
+		#ifdef DEBUG
+		printf("flash program error\n");
+		#endif
+	}
+		addr = addr + 2 ;
+		buff++;
+
+	}
+	HAL_FLASH_Lock();
+
+}
+
+uint32_t hal_get_internalflash_sector(uint32_t addr){
+
+    if((addr < ADDR_FLASH_SECTOR_1) ) return FLASH_SECTOR_0;  
+    else if(addr < ADDR_FLASH_SECTOR_2) return FLASH_SECTOR_1;  
+    else if(addr < ADDR_FLASH_SECTOR_3) return FLASH_SECTOR_2;  
+    else if(addr < ADDR_FLASH_SECTOR_4) return FLASH_SECTOR_3;  
+    else if(addr < ADDR_FLASH_SECTOR_5) return FLASH_SECTOR_4;     
+    else if(addr < ADDR_FLASH_SECTOR_6) return FLASH_SECTOR_5;  
+    else if(addr < ADDR_FLASH_SECTOR_7) return FLASH_SECTOR_6;  
+	else if(addr < ADDR_FLASH_SECTOR_8) return FLASH_SECTOR_7; 
+	else if(addr < ADDR_FLASH_SECTOR_9) return FLASH_SECTOR_8; 
+	else if(addr < ADDR_FLASH_SECTOR_10) return FLASH_SECTOR_9; 
+	else if(addr < ADDR_FLASH_SECTOR_11) return FLASH_SECTOR_10; 
+    else return FLASH_SECTOR_11;  
+ 
 }
