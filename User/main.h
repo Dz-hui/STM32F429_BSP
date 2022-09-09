@@ -20,6 +20,7 @@ extern "C" {
 #include "w25qxx.h"
 #include "at24cxx.h"
 #include "hal_internalflash.h"
+#include "hal_adc.h"
 
 #include "ff.h"
 #include "diskio.h"

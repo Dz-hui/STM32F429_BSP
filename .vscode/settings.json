@@ -16,6 +16,7 @@
         "ff.c": "cpp",
         "hal_internalflash.h": "c",
         "test.h": "c",
-        "stm32_hal_legacy.h": "c"
+        "stm32_hal_legacy.h": "c",
+        "hal_adc.h": "c"
     }
 }

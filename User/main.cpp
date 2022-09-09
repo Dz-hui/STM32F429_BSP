@@ -7,7 +7,7 @@ int main(void){
     LED_GPIO_Init();
     hal_debug_uart_init();
     hal_i2c_init();
-
+    hal_adc_init();
     
     internalflash_test();
 
