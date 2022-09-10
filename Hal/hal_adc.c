@@ -1,13 +1,12 @@
 #include "hal_adc.h"
 
-
 __IO uint16_t ADC_ConvertedValue;
 ADC_HandleTypeDef ADC_Handle;
 ADC_ChannelConfTypeDef ADC_Config;
 
 void hal_adc_nvic_init(void){
 
-    HAL_NVIC_SetPriority(ADC_IRQ, 0, 0);
+    HAL_NVIC_SetPriority(ADC_IRQ, 3, 1);
     HAL_NVIC_EnableIRQ(ADC_IRQ);
 }
 
@@ -40,7 +39,7 @@ void hal_adc_init(void){
     ADC_Handle.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T1_CC1;
     ADC_Handle.Init.DataAlign = ADC_DATAALIGN_RIGHT;
     ADC_Handle.Init.NbrOfConversion = 1;
-    ADC_Handle.Init.DMAContinuousRequests = ENABLE;
+    ADC_Handle.Init.DMAContinuousRequests = DISABLE;
     ADC_Handle.Init.EOCSelection = DISABLE;    
 	                          
     HAL_ADC_Init(&ADC_Handle);
@@ -58,4 +57,12 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* AdcHandle){
 
   ADC_ConvertedValue = HAL_ADC_GetValue(AdcHandle);
 }
+
+
+void ADC_IRQHandler(void){
+
+    HAL_ADC_IRQHandler(&ADC_Handle);
+}
+
+
 

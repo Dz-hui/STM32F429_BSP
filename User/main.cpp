@@ -13,7 +13,8 @@ int main(void){
 
     while (1){
 
-     
+     adc_test();
+
 
     }
 

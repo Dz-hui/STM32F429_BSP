@@ -7,6 +7,7 @@ UINT fnum; //文件成功读取数量
 BYTE buffer[1024];
 BYTE textfilebuffer[] = "Welcome here and wish you luck forever! This is the test program\r\n";
 BYTE work[FF_MIN_SS];
+extern uint16_t ADC_ConvertedValue;
 
 void fatfs_testing(void){
 
@@ -85,4 +86,10 @@ void internalflash_test(void){
 
     printf("\n");
 
+}
+
+void adc_test(void){
+    float adc_val = ((float)ADC_ConvertedValue/4096)*(float)3.3;
+    printf("adc_val = %f\n ",adc_val);
+    HAL_Delay(1000);
 }

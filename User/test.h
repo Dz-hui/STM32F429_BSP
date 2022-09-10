@@ -9,6 +9,7 @@ extern "C" {
 
 void fatfs_testing(void);
 void internalflash_test(void);
+void adc_test(void);
 
 
 #ifdef __cplusplus
