@@ -21,6 +21,7 @@ extern "C" {
 #include "at24cxx.h"
 #include "hal_internalflash.h"
 #include "hal_adc.h"
+#include "hal_tim.h"
 
 #include "ff.h"
 #include "diskio.h"
