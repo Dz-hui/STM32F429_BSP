@@ -10,6 +10,7 @@ int main(void){
     hal_adc_init();
     
     internalflash_test();
+	
 
     while (1){
 

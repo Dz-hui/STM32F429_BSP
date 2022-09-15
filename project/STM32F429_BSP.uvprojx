@@ -439,6 +439,11 @@
               <FileType>1</FileType>
               <FilePath>..\Hal\hal_adc.c</FilePath>
             </File>
+            <File>
+              <FileName>hal_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hal\hal_tim.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
