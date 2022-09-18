@@ -24,14 +24,14 @@ void hal_basetim_init(void){
 void hal_timpwm_gpio_init(void) {
 
 	GPIO_InitTypeDef TIM_GPIO_InitStructure;
-	GENERAL_OCPWM_GPIO_CLK_ENABLE();
+	PWM__GPIO_CLK_ENABLE();
 
 	TIM_GPIO_InitStructure.Pin = PWM_GPIO_PIN;	
 	TIM_GPIO_InitStructure.Mode = GPIO_MODE_AF_PP;    
 	TIM_GPIO_InitStructure.Pull = GPIO_NOPULL;
 	TIM_GPIO_InitStructure.Speed = GPIO_SPEED_HIGH; 	
 	TIM_GPIO_InitStructure.Alternate = PWM_GPIO_AF;
-	HAL_GPIO_Init(PWM_TIM_PORT, &TIM_GPIO_InitStructure);
+	HAL_GPIO_Init(PWM_GPIO_PORT, &TIM_GPIO_InitStructure);
 
 }
 
@@ -39,7 +39,7 @@ void hal_timpwm_init(void){
 
 	TIM_OC_InitTypeDef TIM_OCInitStructure;
 	TIM_HandleTypeDef  TIM_PWMOUTPUT_Handle;
-	GENERAL_TIM_CLK_ENABLE(); 
+	PWM_TIM_CLK_ENABLE(); 
 	hal_timpwm_gpio_init();
 
 	TIM_PWMOUTPUT_Handle.Instance = PWM_TIM_PORT;
