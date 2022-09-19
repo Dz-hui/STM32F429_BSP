@@ -7,8 +7,10 @@ extern "C" {
 
 #include "main.h"
 
-#define ADC_MULIT_CHANNLE_CONVERSION
-#define ADC_NUMBEROF_CHANNLE                             2
+//#define ADC_MULIT_CHANNLE_CONVERSION
+//#define ADC_SINGLE_CHANNEL_CONVERSION
+#define ADC_TRIPLEMODE_SINGLE_CHANNEL_CONVERSION
+#define ADC_NUMBEROF_CHANNLE                             3
 
 #define ADC_RHEOSTAT_GPIO_PORT                           GPIOC
 #define ADC_RHEOSTAT_GPIO_PIN                            GPIO_PIN_3
@@ -16,6 +18,11 @@ extern "C" {
 #define ADC_RHEOSTAT_PORT                                ADC1
 #define ADC_RHEOSTAT_CLK_ENABLE()                        __ADC1_CLK_ENABLE()
 #define ADC_RHEOSTAT_CHANNEL                             ADC_CHANNEL_13
+
+#define ADC2_RHEOSTAT_PORT                               ADC2
+#define ADC3_RHEOSTAT_PORT                               ADC3
+#define ADC2_RHEOSTAT_CLK_ENABLE()                       __ADC2_CLK_ENABLE()
+#define ADC3_RHEOSTAT_CLK_ENABLE()                       __ADC3_CLK_ENABLE()
 
 #define ADC_LIGHTSENSOR_GPIO_PORT                        GPIOA
 #define ADC_LIGHTSENSOR_GPIO_PIN                         GPIO_PIN_4
@@ -28,6 +35,7 @@ extern "C" {
 #define ADC_DMA_STREAM                                   DMA2_Stream0
 #define ADC_DMA_CHANNLE                                  DMA_CHANNEL_0
 #define ADC1_DR_ADDR                                     ((uint32_t)ADC1+0x4c)
+#define RHEOSTAT_ADC_DR_ADDR                             ((uint32_t)0x40012308)
 
 void hal_adc_init(void);
 
