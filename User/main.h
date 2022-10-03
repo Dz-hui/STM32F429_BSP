@@ -22,6 +22,7 @@ extern "C" {
 #include "hal_internalflash.h"
 #include "hal_adc.h"
 #include "hal_tim.h"
+#include "hal_i2s.h"
 
 #include "ff.h"
 #include "diskio.h"
